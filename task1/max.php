@@ -4,17 +4,23 @@ if($_POST){
     $num2=$_POST['number2'];
     $num3=$_POST['number3'];
 
- if($num1> $num2 && $num1 > $num3){
-     $maxNumber= $num1;
- }elseif($num2> $num1 && $num2 >$num3)
+    if($num1==null || $num2== null || $num3==null)
+      $msg="Fill the Form";
+    if($num1> $num2 && $num1 > $num3){
+        $maxNumber= $num1;
+    }elseif($num2> $num1 && $num2 >$num3)
         $maxNumber=$num2;
-else $maxNumber=$num3;
+    elseif($num3> $num1&& $num3>$num2 ) 
+        $maxNumber=$num3;
+        
 
-if($num1< $num2 && $num1 < $num3)
-        $minNumber=$num1;
-elseif($num2 < $num1 && $num2 < $num3)
-        $minNumber=$num2;
-        else $minNumber= $num3;
+    if($num1 < $num2 && $num1 < $num3)
+            $minNumber=$num1;
+    elseif($num2 < $num1 && $num2 < $num3)
+            $minNumber=$num2;
+    elseif($num3< $num1&& $num3< $num2 ) 
+            $minNumber= $num3;
+    
 
 }
 ?>
@@ -57,13 +63,16 @@ elseif($num2 < $num1 && $num2 < $num3)
                     </div>
                      <?php 
                      
+                     if (isset($msg)){
+                         echo $msg;
+                     }
                         if(isset($maxNumber)){
                            echo "<b>Max Number: </b> " . $maxNumber . "<br>";
                         }
                     
                         if(isset($minNumber)){
                         echo "<b>Min Number: </b> " . $minNumber;
-                       }
+                    }
                        ?>
                 </form>
             </div>

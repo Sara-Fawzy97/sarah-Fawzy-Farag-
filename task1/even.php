@@ -2,9 +2,11 @@
 if($_POST){
     $number=$_POST["number"];
 
-    if($number %2 ==0 ){
+   if($number==null)
+     $result= "Enter your number";
+    elseif($number % 2 ==0 ){
         $result= "<b> Number is Even</b>";
-    }else $result= "<b>Number is Negative </b>";
+    }else $result= "<b>Number is Odd </b>";
 }
 ?>
 

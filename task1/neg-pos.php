@@ -2,7 +2,9 @@
 if($_POST){
     $number=$_POST["number"];
 
-    if($number >= 0){
+    if($number==null)
+     $result= "Enter your number";
+   elseif($number >= 0){
         $result= "<b> Number is Positive </b>";
     }else $result= "<b>Number is Negative </b>";
 }
