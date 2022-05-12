@@ -38,7 +38,7 @@ $users = [
 
     ],
     (object)[
-        'id' => null,
+        'id' => 3,
         'name' => 'menna',
         "gender" => (object)[
             'gender' => 'f'
@@ -54,7 +54,7 @@ $users = [
 
     ],
     (object)[
-        'id' => null,
+        'id' => 4,
         'name' => 'menna',
         "gender" => (object)[
             'gender' => 'f'
@@ -70,8 +70,6 @@ $users = [
 
     ],  
 ];
-
-
 
 ?>
 
@@ -96,7 +94,7 @@ $users = [
     <?php  //to print the header of table (first row)  
                                        //id => 1
               foreach($users[0] as $property => $user ){?>
-                <th scope="col"><?php print_r( $property)?></th>  
+                <th scope="col"><?php echo( $property)?></th>  
             <?php 
          }
           ?>
@@ -107,7 +105,9 @@ $users = [
 
   <?php
 
+    
     //to print all data of each user 
+    
    for($i=0; $i< count($users); $i++){ 
       ?>
   
@@ -119,8 +119,8 @@ $users = [
             // check if the value is array or not to find how to print it 
         if(is_array($value) || is_object($value) ){
             // print_r($value);
-                            //[2][$gender]            //gender => f /
-            foreach($users[$i]-> $property as $key=>$data ){
+                            
+            foreach($value as $key=>$data ){
                 
                 //check the value of gender (property) = m /f  
                 if($key=='gender'){
@@ -130,7 +130,6 @@ $users = [
                      $data="Female";
                 }
                 print_r($data . "<br> ");
-
             }
              
         } else   //if the value isn't array /object ===>> id=1
