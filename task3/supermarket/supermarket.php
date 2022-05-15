@@ -1,5 +1,5 @@
 <?php 
-if($_POST){
+if($_SERVER['REQUEST_METHOD'] == "POST"){
  $userName=$_POST['username'];
  $city=$_POST['city'];
  $productsnumber=$_POST['number'];
@@ -12,19 +12,13 @@ if($_POST){
  { $fees=50;}
   else {$fees=100;}
 
-
-  $products=[];
-
- 
+if(!empty($_POST['productname'])){
+ $products=$_POST['productname'];
+ $price=$_POST['price'];
+ $quantity=$_POST['quantity'];
+}
   
 }
-
-// $price =0
-// $price=$_POST["price"];
-// $quantity=$_POST["quantity"];
-
- 
-
 
 ?>
  
@@ -64,28 +58,26 @@ if($_POST){
       ?>
         <div class="row mt-5">
         <div class="col">
-            <input type="text" class="form-control" value="<?= $_POST['productname']?? ''?>"  placeholder="Product Name" name="productname" >
+            <input type="text" class="form-control"   placeholder="Product Name" name="productname[]" required>
         </div>
         <div class="col">
-            <input type="number" class="form-control" placeholder="Product Price" name="price" >
+            <input type="number" class="form-control" placeholder="Product Price" name="price[]" required >
         </div>
         <div class="col">
-            <input type="number" class="form-control" placeholder="Quantity"  name="quantity" >
+            <input type="number" class="form-control" placeholder="Quantity"  name="quantity[]" required >
         </div>
         </div>
 <?php  
- } }
-
-?>
+ } ?>
 
   <button type="submit" class="btn btn-success mt-3 ">Receipt</button>
-  <?php ?>
+  <?php }?>
 
      </form>
 
 <!-- To display reciept details -->
 <?php 
-if(isset($_POST["productname"],$_POST["price"] , $_POST["quantity"])){
+if(!empty($_POST["productname"])&& isset($_POST["price"] )&& isset( $_POST["quantity"])){
   
   ?> 
     <div class="card border-success mb-3 mt-5" >
@@ -102,21 +94,19 @@ if(isset($_POST["productname"],$_POST["price"] , $_POST["quantity"])){
        </tr>
       </thead>
     <tbody>
-     <?php
-     $total=0;
+     <?php 
       for( $i=0 ; $i < $productsnumber ; $i++ ){ 
-        // foreach($products as $key->$value){
-        // $products=[];
-        // foreach($products as $index ){?>
+       ?>
      <tr> 
-      <td><?=
-      $_POST['productname']?></td>
-    
-      <td><?= $_POST['price']; ?></td>
-      <td><?= $_POST['quantity'] ;?></td>
-      <td><?= $subtotal= $_POST['price']*$_POST['quantity']; ?></td>
+      <td><?= $_POST['productname'][$i];?></td>
+      <td><?=$_POST['price'][$i];?></td>
+      <td><?=$_POST['quantity'][$i];?></td>
+      <td><?= $subtotal= $_POST['price'][$i]*$_POST['quantity'][$i]; ?></td>
       </tr>
-     <?php $total+= $subtotal; 
+
+     <?php 
+     $total=0;
+     $total+= $subtotal; 
       if($total<= 1000 )
       $discount =$total*0;
     elseif($total >1000 && $total <= 3000)
@@ -129,17 +119,19 @@ if(isset($_POST["productname"],$_POST["price"] , $_POST["quantity"])){
            }   ?>
   </tbody>
     </table>
-
-    <?= "<strong>City : </strong>" . $city ."<br>"
+    <?php 
+     
+    if(isset($city) && isset($totalAfterDiscount)){
+    echo"<strong>City : </strong>" . $city ."<br>"
     ."<strong>Total : </strong>".$total." EGP <br>"
     ."<strong>Discount : </strong>".$discount." EGP <br>" 
     ."<strong>Total After Discount : </strong>". $totalAfterDiscount ." EGP <br>" 
-    ."<strong>Delivery : </strong>" .$fees. " EGP <br>" ?>
+    ."<strong>Delivery : </strong>" .$fees. " EGP <br>"; ?>
 </div>
-  <div class="card-footer bg-transparent border-success"><?= "<strong>Net Total : </strong>" . $totalAfterDiscount + $fees ." EGP" ?></div>
+  <div class="card-footer bg-transparent border-success"><?= "<strong>Net Total : </strong>" . $totalAfterDiscount + $fees ." EGP" ;}?></div>
 </div>
 
-<?php  ?>
+
 </div>
  </body>
  </html>
