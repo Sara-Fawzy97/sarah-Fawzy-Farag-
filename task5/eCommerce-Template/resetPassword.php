@@ -1,34 +1,34 @@
 <?php
+$title="Reset Your Password";
+include_once('layouts\header.php');
+include_once ("App/Middleware/auth.php");
 
 use App\Database\Models\User;
 use App\Http\Requests\Validations;
-
-$title = "Verification Code";
-include_once("layouts\header.php");
+ 
 $validation = new Validations;
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $validation->setKey('code')->setValue($_POST['code'])->required()->digits(6)->exist('users', 'code');
-    if (empty($validation->getErrors())) {
+if($_SERVER['REQUEST_METHOD'] == "POST"){
+    $validation->setKey('password')->setValue($_POST['password'])->required()->confirmed($_POST['password_confirmation']);
+    $validation->setKey('password_confirmation')->setValue($_POST['password_confirmation'])->required();
+ 
+    if(empty($validation->getErrors())){
+        $code = rand(100000,999999);
         $user = new User;
-        $user->setCode($_POST['code']);
         $user->setEmail($_SESSION['email']);
+        $user->setPassword($_POST['password']);
+    try{
+        $user->updatePasswordByEmail();
+        header('location:login.php');die;
 
-        if ($user->checkCode()->get_result()->num_rows == 1) {
-            $user->setEmail_verfied_at(date('y-m-d h:i:s'));
-            if ($user->makeUserVerified()) {
-                unset($_SESSION['email']);
-                header('location:login.php');
-                die;
-            } else {
-                $error = '<p>Check Your Data</p>';
-            }
-        }
+    }catch(\Exception $e){
+        $error = "<p > something  wrong </p>";
     }
+
+    }
+          
 }
 
 ?>
-
 <div class="login-register-area ptb-100">
     <div class="container">
         <div class="row">
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="login-register-wrapper">
                     <div class="login-register-tab-list nav">
                         <a class="active" data-toggle="tab" href="#lg1">
-                            <h4> Check Code </h4>
+                            <h4> <?= $title ?> </h4>
                         </a>
                     </div>
                     <div class="tab-content">
@@ -45,10 +45,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="login-register-form">
                                     <form action="" method="post">
                                         <?= $error ?? "" ?>
-                                        <input type="number" name="code" placeholder="Verification Code">
-                                        <?= "<p class='text-danger font-weight-bold'>" . $validation->getError('code') . '</p>' ?>
+                                        <input type="password" name="password" placeholder="New Password">
+                                        <?= "<p class='text-danger font-weight-bold'>".$validation->getError('password')."</p>" ?>
+                                        <input type="password" name="password_confirmation" placeholder="Confrim Password">
+                                        <?= "<p class='text-danger font-weight-bold'>".$validation->getError('password_confirmation')."</p>" ?>
                                         <div class="button-box">
-                                            <button type="submit"><span>Check</span></button>
+                                            <button type="submit"><span>Change</span></button>
                                         </div>
                                     </form>
                                 </div>
@@ -61,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 </div>
 <?php
+
 
 include_once "layouts/footerscript.php";
 ?>

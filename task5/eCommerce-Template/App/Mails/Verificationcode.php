@@ -1,25 +1,29 @@
-<?php 
+<?php
 
-class Verificationcode {
+namespace App\Mails;
 
-    public string $mailFromName = 'NTI Ecommerce';
-    
-    public function send(){
-        try{
+use App\Mails\Mail;
+
+class VerificationCode extends Mail
+{
+    public string $mailFromName = "NTI Ecommerce";
+
+    public function send()
+    {
+        try {
+
+            //Recipients
             $this->mail->setFrom($this->mailFrom, $this->mailFromName);
-            $this->mail->addAddress($this->mailTo);
+            $this->mail->addAddress($this->mailTo);     //Add a recipient
 
-
-            $this->mail->isHTML(true);
-            $this->mail->Subject= $this->subject;
-            $this->mail->body =$this->body;
+            //Content
+            $this->mail->isHTML(true);                                  //Set email format to HTML
+            $this->mail->Subject = $this->subject;
+            $this->mail->Body    = $this->body;
             $this->mail->send();
-
             return true;
-        }
-        catch(\Exception $e){
+        } catch (\Exception $e) {
             return false;
         }
     }
-
 }

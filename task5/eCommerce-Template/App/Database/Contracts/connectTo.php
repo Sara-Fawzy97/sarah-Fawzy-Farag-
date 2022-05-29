@@ -1,9 +1,9 @@
-<?php 
-
+<?php
 namespace App\Database\Contracts;
 
-interface ConnectTo
-{
-     function __construct();
+interface ConnectTo{
+
+    function __construct();
     function __destruct();
+  
 }
